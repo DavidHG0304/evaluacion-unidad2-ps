@@ -12,24 +12,25 @@ class OrderService {
     if (!userValid.valid) throw new Error(userValid.message);
 
     if (!this.inventory.checkStock(productId, quantity)) {
-      throw new Error('Out of stock');
+      throw new Error("Out of stock");
     }
 
     const total = this.pricing.calculateFinalPrice(price, quantity);
 
-    this.inventory.reduceStock(productId, quantity);
     const payment = await this.payment.processPayment(total);
 
-    if (payment.status !== 'success') {
-      throw new Error('Payment failed');
+    if (payment.status !== "success") {
+      throw new Error("Payment failed");
     }
 
-    await this.notification.sendNotification(userId, 'Order created');
+    this.inventory.reduceStock(productId, quantity);
+
+    await this.notification.sendNotification(userId, "Order created");
 
     return {
-      orderId: Math.random(),
+      orderId: Math.floor(Math.random() * 10000),
       total,
-      transactionId: payment.transactionId
+      transactionId: payment.transactionId,
     };
   }
 }

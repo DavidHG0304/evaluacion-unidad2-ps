@@ -9,18 +9,17 @@ class OrderController {
         req.userId,
         req.productId,
         req.quantity,
-        req.price
+        req.price,
       );
 
       return {
-        status: 'success',
-        data: order.data
+        status: "success",
+        data: order,
       };
-
     } catch (error) {
       return {
-        status: 'error',
-        message: error.message
+        status: "error",
+        message: error.message,
       };
     }
   }
